@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for, redirect
 
 app = Flask(__name__)
 
@@ -8,7 +8,7 @@ def login():
 
 @app.route('/try_login')
 def try_login():
-	return "try_login"
+	return redirect(url_for('index'))
 
 @app.route('/')
 def index():
@@ -16,11 +16,11 @@ def index():
 
 @app.route('/write')
 def write():
-	return "Index.html from /write"
+	return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
-	return "Log out!!"
+	return redirect(url_for('login'))
 
 
 if __name__ == "__main__":
