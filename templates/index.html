@@ -8,5 +8,13 @@
 <body>
 	会員制の掲示板 <br>
 	テストページ
+
+	<form action="/write" method="get">
+		<label>書き込み: <input type="text" id="msg" name="msg"></label><br>
+		<input type="submit" name="書き込む">
+	</form>
+
+	msg:<br> {{msg}} <br>
+
 </body>
 </html>

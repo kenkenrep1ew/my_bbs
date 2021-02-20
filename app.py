@@ -1,6 +1,9 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, request
+import sys
 
 app = Flask(__name__)
+
+msg =""
 
 @app.route('/login')
 def login():
@@ -12,11 +15,17 @@ def try_login():
 
 @app.route('/')
 def index():
-	return render_template('index.html')
+	app.logger.debug("index")
+	app.logger.debug(msg)
+	return render_template('index.html', msg=msg)
 
 @app.route('/write')
 def write():
-	return redirect(url_for('index'))
+	if request.args.get("msg") is not None:
+		msg = request.args.get("msg")
+		app.logger.debug("write")
+		app.logger.debug(msg)
+	return render_template('index.html', msg=msg)
 
 @app.route('/logout')
 def logout():
