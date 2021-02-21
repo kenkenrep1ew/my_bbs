@@ -1,10 +1,9 @@
 from flask import Flask, render_template, url_for, redirect, request
-import sys
+import sys, os
 
 app = Flask(__name__)
 
-msg ="test"
-#グローバル変数では使えないので、ファイルに変える！！
+DATAFILE = "./data/msg.txt"
 
 @app.route('/login')
 def login():
@@ -16,16 +15,23 @@ def try_login():
 
 @app.route('/')
 def index():
-	app.logger.debug("index")
-	app.logger.debug(msg)
+	msg = ""
+	if os.path.exists(DATAFILE):
+		with open(DATAFILE, 'rt') as f:
+			msg = f.read()
+
+	# app.logger.debug("index")
+	# app.logger.debug(msg)
 	return render_template('index.html', msg=msg)
 
 @app.route('/write', methods=['POST'])
 def write():
-	if request.form["msg"] is not None:
-		msg = request.form["msg"]
-	app.logger.debug("write")
-	app.logger.debug(msg)
+	if 'msg' in request.form:
+		msg = str(request.form["msg"])
+		with open(DATAFILE, 'a') as f:
+			f.write(msg)
+	# app.logger.debug("write")
+	# app.logger.debug(msg)
 	return redirect('/')
 
 @app.route('/logout')
