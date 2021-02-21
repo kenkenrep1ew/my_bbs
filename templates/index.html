@@ -9,9 +9,9 @@
 	会員制の掲示板 <br>
 	テストページ
 
-	<form action="/write" method="get">
-		<label>書き込み: <input type="text" id="msg" name="msg"></label><br>
-		<input type="submit" name="書き込む">
+	<form action="/write" method="post">
+		<textarea name="msg" rows="6" cols="60"></textarea><br>
+		<input type="submit" name="書込">
 	</form>
 
 	msg:<br> {{msg}} <br>

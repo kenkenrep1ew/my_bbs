@@ -3,7 +3,8 @@ import sys
 
 app = Flask(__name__)
 
-msg =""
+msg ="test"
+#グローバル変数では使えないので、ファイルに変える！！
 
 @app.route('/login')
 def login():
@@ -19,13 +20,13 @@ def index():
 	app.logger.debug(msg)
 	return render_template('index.html', msg=msg)
 
-@app.route('/write')
+@app.route('/write', methods=['POST'])
 def write():
-	if request.args.get("msg") is not None:
-		msg = request.args.get("msg")
-		app.logger.debug("write")
-		app.logger.debug(msg)
-	return render_template('index.html', msg=msg)
+	if request.form["msg"] is not None:
+		msg = request.form["msg"]
+	app.logger.debug("write")
+	app.logger.debug(msg)
+	return redirect('/')
 
 @app.route('/logout')
 def logout():
