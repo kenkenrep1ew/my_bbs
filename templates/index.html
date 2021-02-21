@@ -14,7 +14,9 @@
 		<input type="submit" name="書込">
 	</form>
 
-	msg:<br> {{msg}} <br>
+	{% for card in cards %}
+		{{card.msg}} {{card.usr}} {{card.time}} <br>	
+	{% endfor %}
 
 </body>
 </html>
