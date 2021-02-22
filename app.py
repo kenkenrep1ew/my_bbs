@@ -1,62 +1,78 @@
 from flask import Flask, render_template, url_for, redirect, request, session
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 import sys, os, time, datetime
 import json
 
 app = Flask(__name__)
 app.secret_key = '087fahvaln'
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 DATAFILE = "./data/msg.json"
 
-USR = {"ken":"aaa", "mai":"bbb",}
+
+class User(UserMixin):
+	def __init__(self, user_id, name, password):
+		self.user_id = user_id
+		self.name = name
+		self.password = password
+	def get_id(self):
+		return self.user_id
+
+ken = User(0,"ken", "aaa")
+mai = User(1, "mai", "bbb")
+users = [ken, mai]
 
 # json_card = [{ "usr":"", "time":"", "msg": ""}]
+
+@login_manager.user_loader
+def load_user(user_id):
+	return users[user_id]
+
+@login_manager.unauthorized_handler
+def unauthorized():
+	return redirect('/login')
 
 @app.route('/login')
 def login():
 	return render_template('login.html')
 
-@app.route('/try_login', methods=['POST'])
+@app.route('/try_login', methods=['GET','POST'])
 def try_login():
+
 	if "name" in request.form:
 		name = request.form["name"]
-	if "pw" in request.form:
-		pw = request.form["pw"]
-	if (name == None) or (pw == None):
-		return redirect('/login')
-	if check_login(name, pw) == False:
-		return redirect('/login')
-	else:
-		return redirect(url_for('index'))
+	if "password" in request.form:
+		password = request.form["password"]
 
-def check_login(name, pw):
-	if not name in USR:
-		return False
-	if USR[name] != pw:
-		return False
-	else:
-		session['login'] = name
-		return True
+	if (name == None) or (password == None):
+		return redirect('/login')
+	
+	user_id = -1
 
-def is_login():
-	if 'login' in session:
-		return True
-	else:
-		return False
+	for user in users:
+		if user.name == name and user.password == password:
+			user_id = user.get_id()
+	if user_id <= -1:
+		return redirect('/login')
+
+	user = User(user_id, name, password)
+	login_user(user)
+
+	return redirect(url_for('index'))
 
 @app.route('/')
+@login_required
 def index():
-	if not is_login():
-		return redirect('/login')
 	json_card = []
 	if os.path.exists(DATAFILE):
 		with open(DATAFILE, 'r') as f:
 			json_card = json.load(f)
-
-	# app.logger.debug("index")
-	# app.logger.debug(msg)
 	return render_template('index.html', cards=json_card)
 
 @app.route('/write', methods=['POST'])
+@login_required
 def write():
 	json_card = []
 	if os.path.exists(DATAFILE):
@@ -69,12 +85,12 @@ def write():
 		json_card.append({"msg":msg, "time":t, "usr":u})
 		with open(DATAFILE, 'w') as f:
 			json.dump(json_card, f)
-	# app.logger.debug("write")
-	# app.logger.debug(msg)
 	return redirect('/')
 
 @app.route('/logout')
+@login_required
 def logout():
+	logout_user()
 	return redirect(url_for('login'))
 
 
