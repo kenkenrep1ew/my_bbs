@@ -6,10 +6,10 @@
 <body>
 	ログインページ
 
-	<form action="/try_login" method="get">
-		<label>名前：<input type="text" id="name" name="user_name"></label><br>
-		<label>パスワード：<input type="password" name="password"></label>
-		<input type="submit" name="送信する">
+	<form action="/try_login" method="post">
+		<label>名 前：<input type="text" name="name"></label><br>
+		<label>パスワード：<input type="password" name="pw"></label>
+		<input type="submit" value="ログイン" name="login">
 	</form>
 </body>
 </html>
