@@ -1,15 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>会員制の掲示板のログインページ</title>
-</head>
-<body>
-	ログインページ
+{% extends "layout.html" %}
+
+
+{% block body %}
+	<h3>ログインページ</h3>
 
 	<form action="/try_login" method="post">
-		<label>名 前：<input type="text" name="name"></label><br>
-		<label>パスワード：<input type="password" name="password"></label>
-		<input type="submit" value="ログイン" name="login">
+		<div class="form-group">
+			<label for="InputTitle">名 前：</label>
+			<input type="text" class="form-control" id="InputTitle" name="name">
+		</div>
+		<div class="form-group">
+			<label for="InputPassword">パスワード：</label>
+			<input type="password" class="form-control" id="InputPassword" name="password">
+		</div>
+		<button type="submit" class="btn btn-primary">ログイン</button>
 	</form>
-</body>
-</html>
+
+{% endblock %}

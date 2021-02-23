@@ -1,5 +1,8 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template, url_for, redirect, request, session
-from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 import sys, os, time, datetime
 import json
 
@@ -10,7 +13,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 DATAFILE = "./data/msg.json"
-
 
 class User(UserMixin):
 	def __init__(self, user_id, name, password):
@@ -78,11 +80,12 @@ def write():
 	if os.path.exists(DATAFILE):
 		with open(DATAFILE, 'r') as f:
 			json_card = json.load(f)
+	# app.logger.debug(str(current_user.name))
 	if 'msg' in request.form:
-		msg = str(request.form["msg"])
+		msg = request.form["msg"].encode('utf-8')
 		t = str(datetime.datetime.fromtimestamp(time.time()))
-		u = ""
-		json_card.append({"msg":msg, "time":t, "usr":u})
+		u = current_user.name.encode('utf-8')
+		json_card.insert(0, {"msg":msg, "time":t, "usr":u})
 		with open(DATAFILE, 'w') as f:
 			json.dump(json_card, f)
 	return redirect('/')
