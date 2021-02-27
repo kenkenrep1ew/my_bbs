@@ -2,18 +2,19 @@
 
 
 {% block body %}
-	<h3>ログインページ</h3>
+	<h3>This is Log-in Page.</h3>
+	You have to log-in if you want to watch your QandA Page
 
 	<form action="/try_login" method="post">
 		<div class="form-group">
-			<label for="InputTitle">名 前：</label>
+			<label for="InputTitle">NAME:</label>
 			<input type="text" class="form-control" id="InputTitle" name="name">
 		</div>
 		<div class="form-group">
-			<label for="InputPassword">パスワード：</label>
+			<label for="InputPassword">PASSWORD:</label>
 			<input type="password" class="form-control" id="InputPassword" name="password">
 		</div>
-		<button type="submit" class="btn btn-primary">ログイン</button>
+		<button type="submit" class="btn btn-primary">Log in</button>
 	</form>
 
 {% endblock %}

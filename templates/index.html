@@ -1,30 +1,34 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
-	<h2>会員制の掲示板</h2>
-	<!-- テストページ -->
+	<nav class="navbar">
+		<a class="navbar-brand"></a>
+	<h2>Your Q&amp;A Page</h2>
+	
 	<form action="/logout">
 		<div class="form-gropu">
-			<button type="submit" class="btn btn-primary">ログアウト</button>
+			<button type="submit" class="btn btn-primary">Log out</button>
 		</div>
 	</form>
+
+	</nav>
 
 	<form action="/write" method="post">
 		<div class="form-group">
-			<textarea class="form-control" name="msg" rows="5"></textarea><br>
+			<textarea class="form-control" name="msg" rows="5"></textarea>
 		</div>
 		<div class="form-group">
-			<button type="submit" class="btn btn-primary">書込み</button>
+			<button type="submit" class="btn btn-primary">Post</button>
 		</div>
 	</form>
+	<br>
 
 	{% for card in cards %}
 	<div class="card">
 		<div class="card-body">
-		<h5 class="card-title">{{card.msg}}</h5>
+		<h5 class="card-title">Q:{{card.msg}}</h5>
 		<p class="card-text">{{card.usr}} {{card.time}}</p>
-
+		<a href="#" class="btn btn-primary">Answer</a>
 		</div>
 	</div>
 	{% endfor %}
